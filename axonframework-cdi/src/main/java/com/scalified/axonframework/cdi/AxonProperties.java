@@ -14,24 +14,28 @@
  * limitations under the License.
  */
 
-allprojects {
+package com.scalified.axonframework.cdi;
 
-	val lombokVersion by extra("1.18.6")
-	val javaeeVersion by extra("7.0")
-	val commonsLang3Version by extra("3.8.1")
-	val axonVersion by extra("4.1.1")
+import lombok.Builder;
+import lombok.Value;
 
-	group = "com.scalified"
-	version = "$axonVersion-RC1"
+/**
+ * <b>Axon</b> configuration properties
+ *
+ * @author shell
+ * @since 2019-05-07
+ */
+@Value
+@Builder
+public class AxonProperties {
 
-	repositories {
-		mavenCentral()
-	}
-
-	tasks.withType<JavaCompile> {
-		sourceCompatibility = "${JavaVersion.VERSION_1_8}"
-		targetCompatibility = "${JavaVersion.VERSION_1_8}"
-		options.encoding = Charsets.UTF_8.name()
-	}
+	/**
+	 * Indicates whether <b>Axon</b> is configured to start automatically
+	 *
+	 * <p>
+	 * {@code true} by default
+	 */
+	@Builder.Default
+	private boolean autoStartEnabled = true;
 
 }

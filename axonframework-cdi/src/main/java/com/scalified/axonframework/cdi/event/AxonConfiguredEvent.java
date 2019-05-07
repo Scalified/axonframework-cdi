@@ -14,24 +14,26 @@
  * limitations under the License.
  */
 
-allprojects {
+package com.scalified.axonframework.cdi.event;
 
-	val lombokVersion by extra("1.18.6")
-	val javaeeVersion by extra("7.0")
-	val commonsLang3Version by extra("3.8.1")
-	val axonVersion by extra("4.1.1")
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.axonframework.config.Configuration;
 
-	group = "com.scalified"
-	version = "$axonVersion-RC1"
+/**
+ * <b>Axon</b> event, which is fired once <b>Axon</b>
+ * {@link Configuration} is built
+ *
+ * @author shell
+ * @since 2019-05-07
+ */
+@Getter
+@RequiredArgsConstructor
+public class AxonConfiguredEvent implements AxonEvent {
 
-	repositories {
-		mavenCentral()
-	}
-
-	tasks.withType<JavaCompile> {
-		sourceCompatibility = "${JavaVersion.VERSION_1_8}"
-		targetCompatibility = "${JavaVersion.VERSION_1_8}"
-		options.encoding = Charsets.UTF_8.name()
-	}
+	/**
+	 * <b>Axon</b> configuration
+	 */
+	private final Configuration configuration;
 
 }

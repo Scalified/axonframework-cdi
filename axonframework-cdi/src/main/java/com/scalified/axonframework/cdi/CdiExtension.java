@@ -27,6 +27,9 @@ import com.scalified.axonframework.cdi.component.ComponentResolver;
 import com.scalified.axonframework.cdi.component.ConfigurableComponentResolver;
 import com.scalified.axonframework.cdi.configuration.LazyRetrievedModuleConfiguration;
 import com.scalified.axonframework.cdi.configuration.transaction.JtaTransactionManager;
+import com.scalified.axonframework.cdi.event.AxonConfiguredEvent;
+import com.scalified.axonframework.cdi.event.AxonStartedEvent;
+import com.scalified.axonframework.cdi.event.AxonStoppedEvent;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
@@ -83,6 +86,11 @@ public class CdiExtension implements Extension {
 	 */
 	@Getter(AccessLevel.PACKAGE)
 	private Configuration configuration;
+
+	/**
+	 * <b>Axon</b> configuration properties component
+	 */
+	private Component axonPropertiesComponent;
 
 	/**
 	 * {@link org.axonframework.modelling.command.Aggregate} types
@@ -210,6 +218,35 @@ public class CdiExtension implements Extension {
 	private List<Component> customComponents = new LinkedList<>();
 
 	/**
+	 * Processes the given {@link AxonProperties} annotated {@code type}
+	 *
+	 * @param processAnnotatedType to process
+	 * @param <T>                  {@link AxonProperties} type
+	 */
+	<T extends AxonProperties> void processAxonPropertiesAnnotatedType(
+			@Observes ProcessAnnotatedType<T> processAnnotatedType) {
+		Type type = processAnnotatedType.getAnnotatedType().getBaseType();
+		axonPropertiesComponent = new Component(type);
+		log.trace("Initialized AxonProperties component: {} ", axonPropertiesComponent);
+	}
+
+	/**
+	 * Processes the given {@link AxonProperties} {@code processProducer}
+	 *
+	 * @param processProducer to process
+	 * @param <T>             the bean class of the bean that declares the producer
+	 *                        method or field
+	 * @param <K>             {@link AxonProperties} type
+	 */
+	<T, K extends AxonProperties> void processAxonPropertiesProducer(@Observes ProcessProducer<T, K> processProducer) {
+		Producer<K> producer = processProducer.getProducer();
+		AnnotatedMember<T> annotatedMember = processProducer.getAnnotatedMember();
+		Type type = annotatedMember.getBaseType();
+		axonPropertiesComponent = new Component(type, producer);
+		log.trace("Initialized AxonProperties component: {} ", axonPropertiesComponent);
+	}
+
+	/**
 	 * Processes the given {@code type} annotated with {@code Aggregate} annotation
 	 *
 	 * @param type {@link ProcessAnnotatedType} to process
@@ -217,8 +254,8 @@ public class CdiExtension implements Extension {
 	 */
 	<T> void processAggregateAnnotated(@Observes @WithAnnotations({Aggregate.class}) ProcessAnnotatedType<T> type) {
 		Class<T> aggregateType = type.getAnnotatedType().getJavaClass();
-		log.trace("Initialized Aggregate class: {}", aggregateType);
 		aggregateTypes.add(aggregateType);
+		log.trace("Initialized Aggregate class: {}", aggregateType);
 	}
 
 	/**
@@ -229,8 +266,8 @@ public class CdiExtension implements Extension {
 	 */
 	<T> void processSagaAnnotated(@Observes @WithAnnotations({Saga.class}) ProcessAnnotatedType<T> type) {
 		Class<T> sagaType = type.getAnnotatedType().getJavaClass();
-		log.trace("Initialized Saga class: {}", sagaType);
 		sagaTypes.add(sagaType);
+		log.trace("Initialized Saga class: {}", sagaType);
 	}
 
 	/**
@@ -690,11 +727,23 @@ public class CdiExtension implements Extension {
 	 * Invoked after container has validated that there are no deployment problems
 	 * and before creating contexts or processing requests
 	 *
+	 * <p>
+	 * Fires {@link AxonConfiguredEvent}
+	 *
+	 * <p>
+	 * May fire {@link AxonStartedEvent} if {@link AxonProperties#isAutoStartEnabled()}
+	 * is {@code true}
+	 *
 	 * @param event       an event fired after deployment validated
 	 * @param beanManager current {@link BeanManager}
+	 * @see AxonProperties
+	 * @see AxonConfiguredEvent
+	 * @see AxonStartedEvent
 	 */
 	void afterDeploymentValidation(@Observes AfterDeploymentValidation event, BeanManager beanManager) {
 		log.debug("Configuring Axon application");
+
+		AxonProperties axonProperties = resolveProperties(beanManager);
 
 		configureAggregates(beanManager);
 		configureSagas(beanManager);
@@ -727,10 +776,28 @@ public class CdiExtension implements Extension {
 		configureEventDispatchInterceptors(beanManager);
 
 		log.info("Axon application configured");
+		beanManager.fireEvent(new AxonConfiguredEvent(configuration));
 
-		log.debug("Starting Axon application");
-		configuration.start();
-		log.info("Axon application started");
+		if (axonProperties.isAutoStartEnabled()) {
+			log.debug("Starting Axon application");
+			configuration.start();
+			log.info("Axon application started");
+			beanManager.fireEvent(new AxonStartedEvent());
+		} else {
+			log.info("Skipping Axon auto start since disabled");
+		}
+	}
+
+	/**
+	 * Resolves <b>Axon</b> configuration properties
+	 *
+	 * @param beanManager current {@link BeanManager}
+	 * @return <b>Axon</b> configuration properties
+	 */
+	private AxonProperties resolveProperties(BeanManager beanManager) {
+		return Optional.ofNullable(axonPropertiesComponent)
+				.map(component -> ComponentResolver.of(component).<AxonProperties>resolve(beanManager))
+				.orElseGet(() -> AxonProperties.builder().build());
 	}
 
 	/**
@@ -1123,13 +1190,18 @@ public class CdiExtension implements Extension {
 	/**
 	 * Invoked after container has finished processing requests and destroyed all contexts
 	 *
+	 * <p>
+	 * Fires {@link AxonStoppedEvent}
+	 *
 	 * @param event       an event fired after deployment validated
 	 * @param beanManager current {@link BeanManager}
+	 * @see AxonStoppedEvent
 	 */
 	void beforeShutdown(@Observes BeforeShutdown event, BeanManager beanManager) {
 		log.debug("Stopping Axon application");
 		configuration.shutdown();
 		log.info("Axon application stopped");
+		beanManager.fireEvent(new AxonStoppedEvent());
 	}
 
 }
