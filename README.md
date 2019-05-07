@@ -10,7 +10,7 @@ Java EE API version 7
 
 Note that this is not official implementation. An official implementation provided by Axon team can be found among 
 official public [Axon GitHub repositories](https://github.com/AxonFramework). The main idea of this Library is to have
-a bit more different approach in configuration and provide more convenient tools specific for Java EE world
+a bit more different approach in configuration and to provide more convenient tools specific for Java EE world
 
 ## Requirements
 
@@ -69,6 +69,68 @@ public class SomeBean {
     @Inject
     private Repository<Creditor> creditorRepository;
     
+}
+```
+
+### Lifecycle Events
+
+Library provides the following lifecycle events:
+
+ * com.scalified.axonframework.cdi.event.AxonEvent (supertype)
+ * com.scalified.axonframework.cdi.event.AxonConfiguredEvent (fired once **Axon** configured)
+ * com.scalified.axonframework.cdi.event.AxonStartedEvent (fired once **Axon** started)
+ * com.scalified.axonframework.cdi.event.AxonStoppedEvent (fired once **Axon** stopped)
+
+Events can be subscribed as follows:
+
+```java
+// imports omitted
+import org.axonframework.config.Configuration;
+import com.scalified.axonframework.cdi.event.AxonEvent;
+import com.scalified.axonframework.cdi.event.AxonConfiguredEvent;
+import com.scalified.axonframework.cdi.event.AxonStartedEvent;
+import com.scalified.axonframework.cdi.event.AxonStoppedEvent;
+
+@ApplicationScoped
+public class AxonEventListener {
+
+    void on(@Observes AxonEvent event) {
+        // ...
+    }
+
+    void on(@Observes AxonConfiguredEvent event) {
+        Configuration configuration = event.getConfiguration();
+        // ...
+    }
+
+    void on(@Observes AxonStartedEvent event) {
+        // ...
+    }
+
+    void on(@Observes AxonStoppedEvent event) {
+        // ...
+    }
+
+}
+```
+
+### Properties
+
+**Axon** library-specific properties can be provided as follows:
+
+```java
+// imports omitted
+import com.scalified.axonframework.cdi.AxonProperties;
+
+@ApplicationScoped
+public class AxonConfiguration {
+
+    AxonProperties axonProperties() {
+        return AxonProperties.builder()
+            .autoStartEnabled(false)
+            .build();
+    }
+
 }
 ```
 
