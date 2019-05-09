@@ -1,3 +1,7 @@
+# 4.1.1-RC2
+
+* [**#6** ErrorHandler and ListenerInvocationErrorHandler recognition](https://github.com/Scalified/axonframework-cdi/issues/6)
+
 # 4.1.1-RC1
 
 * [**#3** Axon Properties And Events](https://github.com/Scalified/axonframework-cdi/issues/3)

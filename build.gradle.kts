@@ -22,7 +22,7 @@ allprojects {
 	val axonVersion by extra("4.1.1")
 
 	group = "com.scalified"
-	version = "$axonVersion-RC1"
+	version = "$axonVersion-RC2"
 
 	repositories {
 		mavenCentral()
