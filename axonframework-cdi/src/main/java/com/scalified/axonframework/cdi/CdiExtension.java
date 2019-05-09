@@ -41,8 +41,10 @@ import org.axonframework.commandhandling.CommandHandler;
 import org.axonframework.common.AxonConfigurationException;
 import org.axonframework.common.transaction.TransactionManager;
 import org.axonframework.config.*;
+import org.axonframework.eventhandling.ErrorHandler;
 import org.axonframework.eventhandling.EventBus;
 import org.axonframework.eventhandling.EventHandler;
+import org.axonframework.eventhandling.ListenerInvocationErrorHandler;
 import org.axonframework.eventsourcing.eventstore.EventStorageEngine;
 import org.axonframework.messaging.MessageDispatchInterceptor;
 import org.axonframework.messaging.correlation.CorrelationDataProvider;
@@ -181,6 +183,16 @@ public class CdiExtension implements Extension {
 	 * {@link QueryUpdateEmitter} component
 	 */
 	private Component queryUpdateEmitterComponent;
+
+	/**
+	 * {@link ErrorHandler} component
+	 */
+	private Component errorHandlerComponent;
+
+	/**
+	 * {@link ListenerInvocationErrorHandler} component
+	 */
+	private Component listenerInvocationErrorHandlerComponent;
 
 	/**
 	 * {@link CommandDispatchInterceptor} components
@@ -363,6 +375,12 @@ public class CdiExtension implements Extension {
 		}
 		if (TypeUtils.isAssignable(actualType, QueryUpdateEmitter.class)) {
 			initialized = initQueryUpdateEmitterComponent(component) || initialized;
+		}
+		if (TypeUtils.isAssignable(actualType, ErrorHandler.class)) {
+			initialized = initErrorHandlerComponent(component) || initialized;
+		}
+		if (TypeUtils.isAssignable(actualType, ListenerInvocationErrorHandler.class)) {
+			initialized = initListenerInvocationErrorHandlerComponent(component) || initialized;
 		}
 
 		if (TypeUtils.isAssignable(actualType, CommandDispatchInterceptor.class)) {
@@ -637,7 +655,39 @@ public class CdiExtension implements Extension {
 			throw new AxonConfigurationException("Multiple QueryUpdateEmitter components declared");
 		}
 		queryUpdateEmitterComponent = component;
-		log.trace("Initialized QueryUpdateEmitterConfigurable producer: {}", component);
+		log.trace("Initialized QueryUpdateEmitter component: {}", component);
+		return true;
+	}
+
+	/**
+	 * Initializes {@code errorHandlerComponent} from the given {@code component}
+	 *
+	 * @param component component to initialize
+	 * @return {@code true} if the {@code component} was initialized, {@code false} otherwise
+	 * @throws AxonConfigurationException in case of initialization error
+	 */
+	private boolean initErrorHandlerComponent(Component component) {
+		if (nonNull(errorHandlerComponent)) {
+			throw new AxonConfigurationException("Multiple ErrorHandler components declared");
+		}
+		errorHandlerComponent = component;
+		log.trace("Initialized ErrorHandler component: {}", component);
+		return true;
+	}
+
+	/**
+	 * Initializes {@code listenerInvocationErrorHandlerComponent} from the given {@code component}
+	 *
+	 * @param component component to initialize
+	 * @return {@code true} if the {@code component} was initialized, {@code false} otherwise
+	 * @throws AxonConfigurationException in case of initialization error
+	 */
+	private boolean initListenerInvocationErrorHandlerComponent(Component component) {
+		if (nonNull(listenerInvocationErrorHandlerComponent)) {
+			throw new AxonConfigurationException("Multiple ListenerInvocationErrorHandler components declared");
+		}
+		listenerInvocationErrorHandlerComponent = component;
+		log.trace("Initialized ListenerInvocationErrorHandler component: {}", component);
 		return true;
 	}
 
@@ -762,6 +812,8 @@ public class CdiExtension implements Extension {
 		configureQueryBus(beanManager);
 		configureResourceInjector(beanManager);
 		configureQueryUpdateEmitter(beanManager);
+		configureErrorHandler(beanManager);
+		configureListenerInvocationErrorHandler(beanManager);
 
 		configureEventUpcasters(beanManager);
 		configureModules(beanManager);
@@ -1067,7 +1119,39 @@ public class CdiExtension implements Extension {
 			Configurable<QueryUpdateEmitter> configurable =
 					ConfigurableComponentResolver.of(queryUpdateEmitterComponent).resolve(beanManager);
 			configurer = configurer.configureQueryUpdateEmitter(configurable);
-			log.debug("Configured QueryUpdateEmitter: {}", configurable);
+			log.debug("Configured QueryUpdateEmitter: {}", queryUpdateEmitterComponent);
+		}
+	}
+
+	/**
+	 * Configures <b>Axon</b> default {@link ErrorHandler}
+	 *
+	 * @param beanManager current {@link BeanManager}
+	 * @see EventProcessingConfigurer#registerDefaultErrorHandler(Function)
+	 */
+	private void configureErrorHandler(BeanManager beanManager) {
+		if (nonNull(errorHandlerComponent)) {
+			Configurable<ErrorHandler> configurable =
+					ConfigurableComponentResolver.of(errorHandlerComponent).resolve(beanManager);
+			configurer = configurer.eventProcessing(eventProcessingConfigurer ->
+					eventProcessingConfigurer.registerDefaultErrorHandler(configurable));
+			log.debug("Configured default ErrorHandler: {}", errorHandlerComponent);
+		}
+	}
+
+	/**
+	 * Configures <b>Axon</b> default {@link ListenerInvocationErrorHandler}
+	 *
+	 * @param beanManager current {@link BeanManager}
+	 * @see EventProcessingConfigurer#registerDefaultListenerInvocationErrorHandler(Function)
+	 */
+	private void configureListenerInvocationErrorHandler(BeanManager beanManager) {
+		if (nonNull(listenerInvocationErrorHandlerComponent)) {
+			Configurable<ListenerInvocationErrorHandler> configurable =
+					ConfigurableComponentResolver.of(listenerInvocationErrorHandlerComponent).resolve(beanManager);
+			configurer = configurer.eventProcessing(eventProcessingConfigurer ->
+					eventProcessingConfigurer.registerDefaultListenerInvocationErrorHandler(configurable));
+			log.debug("Configured default ListenerInvocationErrorHandler: {}", listenerInvocationErrorHandlerComponent);
 		}
 	}
 
