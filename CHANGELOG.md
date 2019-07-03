@@ -1,3 +1,5 @@
+# 4.1.1-RELEASE
+
 # 4.1.1-RC2
 
 * [**#6** ErrorHandler and ListenerInvocationErrorHandler recognition](https://github.com/Scalified/axonframework-cdi/issues/6)
