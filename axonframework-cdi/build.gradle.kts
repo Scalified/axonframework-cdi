@@ -20,11 +20,11 @@ plugins {
 }
 
 dependencies {
-	annotationProcessor("org.projectlombok:lombok:${extra["lombokVersion"]}")
+	annotationProcessor("org.projectlombok:lombok:${project.extra["lombokVersion"]}")
 
-	compileOnly("org.projectlombok:lombok:${extra["lombokVersion"]}")
-	compileOnly("javax:javaee-api:${extra["javaeeVersion"]}")
+	compileOnly("org.projectlombok:lombok:${project.extra["lombokVersion"]}")
+	compileOnly("javax:javaee-api:${project.extra["javaeeVersion"]}")
 
-	compile("org.axonframework:axon-configuration:${extra["axonVersion"]}")
-	compile("org.apache.commons:commons-lang3:${extra["commonsLang3Version"]}")
+	compile("org.axonframework:axon-configuration:${project.extra["axonVersion"]}")
+	compile("org.apache.commons:commons-lang3:${project.extra["commonsLang3Version"]}")
 }
