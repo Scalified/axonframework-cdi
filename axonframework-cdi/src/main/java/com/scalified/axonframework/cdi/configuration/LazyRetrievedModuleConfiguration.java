@@ -61,37 +61,6 @@ public class LazyRetrievedModuleConfiguration implements ModuleConfiguration {
 	}
 
 	/**
-	 * Defines a phase in which this module's {@link #initialize(Configuration)},
-	 * {@link #start()}, {@link #shutdown()} will be invoked
-	 *
-	 * @return this module's phase
-	 */
-	@Override
-	public int phase() {
-		return delegate().phase();
-	}
-
-	/**
-	 * Invoked when the Configuration is started
-	 *
-	 * @see Configuration#start()
-	 */
-	@Override
-	public void start() {
-		delegate().start();
-	}
-
-	/**
-	 * Invoked prior to shutdown of the application
-	 *
-	 * @see Configuration#shutdown()
-	 */
-	@Override
-	public void shutdown() {
-		delegate().shutdown();
-	}
-
-	/**
 	 * Returns the actual module configuration instance. Usually, it is the
 	 * instance itself. However, in case of module configuration wrappers,
 	 * we would like to provide the wrapped module configuration as the instance
