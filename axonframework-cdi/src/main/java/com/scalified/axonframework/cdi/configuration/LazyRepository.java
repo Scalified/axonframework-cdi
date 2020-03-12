@@ -89,6 +89,24 @@ public class LazyRepository<T> implements Repository<T> {
 	}
 
 	/**
+	 * Loads an aggregate from the repository. If the aggregate is not found it creates the aggregate using the
+	 * specified
+	 * {@code factoryMethod}.
+	 *
+	 * @param aggregateIdentifier The identifier of the aggregate to load
+	 * @param factoryMethod       The method to create the aggregate's root instance
+	 * @return The aggregate root with the given identifier.
+	 */
+	@Override
+	public Aggregate<T> loadOrCreate(String aggregateIdentifier, Callable<T> factoryMethod) throws Exception {
+		try {
+			return load(aggregateIdentifier);
+		} catch (AggregateNotFoundException ignored) {
+			return newInstance(factoryMethod);
+		}
+	}
+
+	/**
 	 * Send a {@link Message} to a {@link Scope} which is described by the given
 	 * {@code scopeDescription}
 	 *

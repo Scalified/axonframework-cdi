@@ -25,6 +25,6 @@ dependencies {
 	compileOnly("org.projectlombok:lombok:${project.extra["lombokVersion"]}")
 	compileOnly("javax:javaee-api:${project.extra["javaeeVersion"]}")
 
-	compile("org.axonframework:axon-configuration:${project.extra["axonVersion"]}")
-	compile("org.apache.commons:commons-lang3:${project.extra["commonsLang3Version"]}")
+	api("org.axonframework:axon-configuration:${project.extra["axonVersion"]}")
+	api("org.apache.commons:commons-lang3:${project.extra["commonsLang3Version"]}")
 }
