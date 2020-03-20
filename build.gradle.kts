@@ -19,10 +19,10 @@ allprojects {
 	val lombokVersion by extra("1.18.12")
 	val javaeeVersion by extra("8.0")
 	val commonsLang3Version by extra("3.9")
-	val axonVersion by extra("4.3")
+	val axonVersion by extra("4.3.1")
 
 	group = "com.scalified"
-	version = "$axonVersion-RELEASE"
+	version = "$axonVersion-RC1"
 
 	repositories {
 		mavenCentral()

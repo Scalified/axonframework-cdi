@@ -1,3 +1,5 @@
+# 4.3.1-RELEASE
+
 # 4.3-RELEASE
 
 * [**#11** JavaEE 8 Update](https://github.com/Scalified/axonframework-cdi/issues/11)
