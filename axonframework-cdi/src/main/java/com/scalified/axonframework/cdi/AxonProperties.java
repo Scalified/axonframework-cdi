@@ -36,6 +36,6 @@ public class AxonProperties {
 	 * {@code true} by default
 	 */
 	@Builder.Default
-	private boolean autoStartEnabled = true;
+	boolean autoStartEnabled = true;
 
 }

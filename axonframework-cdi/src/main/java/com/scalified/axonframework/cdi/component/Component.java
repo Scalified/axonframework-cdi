@@ -37,7 +37,7 @@ public class Component {
 	 * Component {@code type}
 	 */
 	@ToString.Include
-	private Type type;
+	private final Type type;
 
 	/**
 	 * Component {@code producer}

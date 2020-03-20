@@ -6,7 +6,7 @@
 ## Description
 
 This Library provides an integration between [AxonFramework](https://axoniq.io/) and CDI specification from 
-Java EE API version 7
+Java EE API version 8
 
 Note that this is not official implementation. An official implementation provided by Axon team can be found among 
 official public [Axon GitHub repositories](https://github.com/AxonFramework). The main idea of this Library is to have
@@ -20,7 +20,7 @@ The Library requires Java EE container
 
 ```java
 dependencies {
-    compile "com.scalified:axonframework-cdi:$VERSION"
+    implementation "com.scalified:axonframework-cdi:$VERSION"
 }
 ```
 

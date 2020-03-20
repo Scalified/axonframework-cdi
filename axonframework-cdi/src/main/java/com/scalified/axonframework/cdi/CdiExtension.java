@@ -97,7 +97,7 @@ public class CdiExtension implements Extension {
 	/**
 	 * {@link org.axonframework.modelling.command.Aggregate} types
 	 */
-	private List<Class<?>> aggregateTypes = new LinkedList<>();
+	private final List<Class<?>> aggregateTypes = new LinkedList<>();
 
 	/**
 	 * Default {@link AggregateConfigurator} component
@@ -107,12 +107,12 @@ public class CdiExtension implements Extension {
 	/**
 	 * {@link AggregateConfigurator} components
 	 */
-	private Map<Class<?>, Component> aggregateConfiguratorComponents = new HashMap<>();
+	private final Map<Class<?>, Component> aggregateConfiguratorComponents = new HashMap<>();
 
 	/**
 	 * {@link org.axonframework.modelling.saga.Saga} types
 	 */
-	private List<Class<?>> sagaTypes = new LinkedList<>();
+	private final List<Class<?>> sagaTypes = new LinkedList<>();
 
 	/**
 	 * Default {@link SagaConfigurator} component
@@ -122,7 +122,7 @@ public class CdiExtension implements Extension {
 	/**
 	 * {@link SagaConfigurator} components
 	 */
-	private Map<Class<?>, Component> sagaConfiguratorComponents = new HashMap<>();
+	private final Map<Class<?>, Component> sagaConfiguratorComponents = new HashMap<>();
 
 	/**
 	 * {@link EventProcessingConfigurator} component
@@ -132,22 +132,22 @@ public class CdiExtension implements Extension {
 	/**
 	 * {@link Serializer} components
 	 */
-	private Map<String, Component> serializerComponents = new HashMap<>();
+	private final Map<String, Component> serializerComponents = new HashMap<>();
 
 	/**
 	 * <b>CommandHandler</b> types
 	 */
-	private List<Type> commandHandlerTypes = new LinkedList<>();
+	private final List<Type> commandHandlerTypes = new LinkedList<>();
 
 	/**
 	 * <b>EventHandler</b> types
 	 */
-	private List<Type> eventHandlerTypes = new LinkedList<>();
+	private final List<Type> eventHandlerTypes = new LinkedList<>();
 
 	/**
 	 * <b>QueryHandler</b> types
 	 */
-	private List<Type> queryHandlerTypes = new LinkedList<>();
+	private final List<Type> queryHandlerTypes = new LinkedList<>();
 
 	/**
 	 * {@link TransactionManager} component
@@ -197,37 +197,37 @@ public class CdiExtension implements Extension {
 	/**
 	 * {@link CommandDispatchInterceptor} components
 	 */
-	private List<Component> commandDispatchInterceptorComponents = new LinkedList<>();
+	private final List<Component> commandDispatchInterceptorComponents = new LinkedList<>();
 
 	/**
 	 * {@link EventDispatchInterceptor} components
 	 */
-	private List<Component> eventDispatchInterceptorComponents = new LinkedList<>();
+	private final List<Component> eventDispatchInterceptorComponents = new LinkedList<>();
 
 	/**
 	 * {@link EventUpcaster} components
 	 */
-	private List<Component> eventUpcasterComponents = new LinkedList<>();
+	private final List<Component> eventUpcasterComponents = new LinkedList<>();
 
 	/**
 	 * {@link CorrelationDataProvider} components
 	 */
-	private List<Component> correlationDataProviderComponents = new LinkedList<>();
+	private final List<Component> correlationDataProviderComponents = new LinkedList<>();
 
 	/**
 	 * {@link ModuleConfiguration} components
 	 */
-	private List<Component> moduleConfigurationComponents = new LinkedList<>();
+	private final List<Component> moduleConfigurationComponents = new LinkedList<>();
 
 	/**
 	 * {@link ConfigurerModule} components
 	 */
-	private List<Component> configurerModuleComponents = new LinkedList<>();
+	private final List<Component> configurerModuleComponents = new LinkedList<>();
 
 	/**
 	 * <b>Custom</b> components
 	 */
-	private List<Component> customComponents = new LinkedList<>();
+	private final List<Component> customComponents = new LinkedList<>();
 
 	/**
 	 * Processes the given {@link AxonProperties} annotated {@code type}

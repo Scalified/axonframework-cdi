@@ -14,12 +14,6 @@
  * limitations under the License.
  */
 
-pluginManagement {
-	repositories {
-		gradlePluginPortal()
-	}
-}
-
 rootProject.name = "axonframework-cdi"
 
 include("axonframework-cdi")
