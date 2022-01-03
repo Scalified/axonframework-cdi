@@ -1,6 +1,6 @@
 # AxonFramework CDI Integration Library
 
-[![Build Status](https://travis-ci.com/Scalified/axonframework-cdi.svg)](https://travis-ci.com/Scalified/axonframework-cdi)
+[![Build Status](https://github.com/Scalified/axonframework-cdi/actions/workflows/gradle.yml/badge.svg)](https://github.com/Scalified/axonframework-cdi/actions)
 [![Maven Central](https://img.shields.io/maven-central/v/com.scalified/axonframework-cdi.svg)](https://search.maven.org/search?q=g:com.scalified%20AND%20a:axonframework-cdi&core=gav)
 
 ## Description
