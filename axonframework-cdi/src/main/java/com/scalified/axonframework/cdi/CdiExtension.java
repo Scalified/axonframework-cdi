@@ -1040,8 +1040,10 @@ public class CdiExtension implements Extension {
 					ConfigurableComponentResolver.of(commandBusComponent).resolve(beanManager);
 			configurer = configurer.configureCommandBus(conf -> {
 				CommandBus commandBus = configurable.apply(conf);
+				//noinspection resource
 				commandBus.registerHandlerInterceptor(
-						new CorrelationDataInterceptor<>(conf.correlationDataProviders()));
+						new CorrelationDataInterceptor<>(conf.correlationDataProviders())
+				);
 				return commandBus;
 			});
 			log.debug("Configured CommandBus: {}", commandBusComponent);
@@ -1226,7 +1228,7 @@ public class CdiExtension implements Extension {
 		for (Component component : customComponents) {
 			Configurable<T> configurable = ConfigurableComponentResolver.of(component).resolve(beanManager);
 			Type actualType = Optional.ofNullable(
-					ReflectionUtils.getTypeArgument(component.getType(), Configurable.class))
+							ReflectionUtils.getTypeArgument(component.getType(), Configurable.class))
 					.orElse(component.getType());
 			configurer = configurer.registerComponent(ReflectionUtils.getRawType(actualType), configurable);
 			log.debug("Configured custom component: {}", component);
@@ -1247,6 +1249,7 @@ public class CdiExtension implements Extension {
 		CommandBus commandBus = configuration.commandBus();
 		for (Component component : commandDispatchInterceptorComponents) {
 			CommandDispatchInterceptor interceptor = ComponentResolver.of(component).resolve(beanManager);
+			//noinspection resource
 			commandBus.registerDispatchInterceptor(interceptor);
 			log.debug("Configured CommandDispatchInterceptor: {}", component);
 		}
@@ -1266,6 +1269,7 @@ public class CdiExtension implements Extension {
 		EventBus eventBus = configuration.eventBus();
 		for (Component component : eventDispatchInterceptorComponents) {
 			EventDispatchInterceptor interceptor = ComponentResolver.of(component).resolve(beanManager);
+			//noinspection resource
 			eventBus.registerDispatchInterceptor(interceptor);
 			log.debug("Configured EventDispatchInterceptor: {}", component);
 		}
