@@ -19,7 +19,7 @@ allprojects {
 	val lombokVersion by extra("1.18.24")
 	val javaeeVersion by extra("8.0.1")
 	val commonsLang3Version by extra("3.11")
-	val axonVersion by extra("4.6.0")
+	val axonVersion by extra("4.6.1")
 
 	group = "com.scalified"
 	version = "$axonVersion-RC1"
