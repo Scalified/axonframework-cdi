@@ -16,6 +16,7 @@
 
 package com.scalified.axonframework.cdi.configuration;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.axonframework.messaging.Message;
 import org.axonframework.messaging.Scope;
@@ -58,7 +59,7 @@ public class LazyRepository<T> implements Repository<T> {
 	 * @throws AggregateNotFoundException if aggregate with given id cannot be found
 	 */
 	@Override
-	public Aggregate<T> load(String aggregateIdentifier) {
+	public Aggregate<T> load(@NonNull String aggregateIdentifier) {
 		return delegate().load(aggregateIdentifier);
 	}
 
@@ -71,7 +72,7 @@ public class LazyRepository<T> implements Repository<T> {
 	 * @throws AggregateNotFoundException if aggregate with given id cannot be found
 	 */
 	@Override
-	public Aggregate<T> load(String aggregateIdentifier, Long expectedVersion) {
+	public Aggregate<T> load(@NonNull String aggregateIdentifier, Long expectedVersion) {
 		return delegate().load(aggregateIdentifier, expectedVersion);
 	}
 
@@ -84,7 +85,7 @@ public class LazyRepository<T> implements Repository<T> {
 	 * @throws Exception when the factoryMethod throws an exception
 	 */
 	@Override
-	public Aggregate<T> newInstance(Callable<T> factoryMethod) throws Exception {
+	public Aggregate<T> newInstance(@NonNull Callable<T> factoryMethod) throws Exception {
 		return delegate().newInstance(factoryMethod);
 	}
 
@@ -98,7 +99,10 @@ public class LazyRepository<T> implements Repository<T> {
 	 * @return The aggregate root with the given identifier.
 	 */
 	@Override
-	public Aggregate<T> loadOrCreate(String aggregateIdentifier, Callable<T> factoryMethod) throws Exception {
+	public Aggregate<T> loadOrCreate(
+			@NonNull String aggregateIdentifier,
+			@NonNull Callable<T> factoryMethod
+	) throws Exception {
 		try {
 			return load(aggregateIdentifier);
 		} catch (AggregateNotFoundException ignored) {
