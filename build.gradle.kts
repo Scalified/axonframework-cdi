@@ -19,7 +19,7 @@ allprojects {
 	val lombokVersion by extra("1.18.28")
 	val javaeeVersion by extra("8.0")
 	val commonsLang3Version by extra("3.12.0")
-	val axonVersion by extra("4.6.8")
+	val axonVersion by extra("4.8.0")
 
 	group = "com.scalified"
 	version = axonVersion
@@ -29,8 +29,8 @@ allprojects {
 	}
 
 	tasks.withType<JavaCompile> {
-		sourceCompatibility = "${JavaVersion.VERSION_1_8}"
-		targetCompatibility = "${JavaVersion.VERSION_1_8}"
+		sourceCompatibility = "${JavaVersion.VERSION_11}"
+		targetCompatibility = "${JavaVersion.VERSION_11}"
 		options.encoding = Charsets.UTF_8.name()
 	}
 
