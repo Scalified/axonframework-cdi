@@ -1,0 +1,13 @@
+[versions]
+axon = "4.10.1"
+
+lombok = "1.18.34"
+javaee = "8.0"
+commons-lang3 = "3.17.0"
+
+[libraries]
+axon = { group = "org.axonframework", name = "axon-configuration", version.ref = "axon" }
+
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+commons-lang3 = { group = "org.apache.commons", name = "commons-lang3", version.ref = "commons-lang3" }
+javaee = { group = "javax", name = "javaee-api", version.ref = "javaee" }

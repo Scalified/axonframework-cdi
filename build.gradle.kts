@@ -16,22 +16,17 @@
 
 allprojects {
 
-	val lombokVersion by extra("1.18.28")
-	val javaeeVersion by extra("8.0")
-	val commonsLang3Version by extra("3.12.0")
-	val axonVersion by extra("4.9.3")
+    group = "com.scalified"
+    version = rootProject.libs.versions.axon.get()
 
-	group = "com.scalified"
-	version = axonVersion
+    repositories {
+        mavenCentral()
+    }
 
-	repositories {
-		mavenCentral()
-	}
-
-	tasks.withType<JavaCompile> {
-		sourceCompatibility = "${JavaVersion.VERSION_11}"
-		targetCompatibility = "${JavaVersion.VERSION_11}"
-		options.encoding = Charsets.UTF_8.name()
-	}
+    tasks.withType<JavaCompile> {
+        sourceCompatibility = "${JavaVersion.VERSION_11}"
+        targetCompatibility = "${JavaVersion.VERSION_11}"
+        options.encoding = Charsets.UTF_8.name()
+    }
 
 }

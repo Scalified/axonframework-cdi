@@ -19,12 +19,18 @@ plugins {
 	id("maven-publish")
 }
 
+tasks.withType<Jar> {
+	manifest {
+		attributes["Automatic-Module-Name"] = "axonframework.cdi"
+	}
+}
+
 dependencies {
-	annotationProcessor("org.projectlombok:lombok:${project.extra["lombokVersion"]}")
+	annotationProcessor(libs.lombok)
 
-	compileOnly("org.projectlombok:lombok:${project.extra["lombokVersion"]}")
-	compileOnly("javax:javaee-api:${project.extra["javaeeVersion"]}")
+	compileOnly(libs.lombok)
+	compileOnly(libs.javaee)
 
-	api("org.axonframework:axon-configuration:${project.extra["axonVersion"]}")
-	api("org.apache.commons:commons-lang3:${project.extra["commonsLang3Version"]}")
+	api(libs.axon)
+	api(libs.commons.lang3)
 }
