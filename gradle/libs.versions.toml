@@ -1,5 +1,5 @@
 [versions]
-axon = "4.10.1"
+axon = "4.10.2"
 
 lombok = "1.18.34"
 javaee = "8.0"

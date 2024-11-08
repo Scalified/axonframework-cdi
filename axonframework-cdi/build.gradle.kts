@@ -16,10 +16,11 @@
 
 plugins {
 	`java-library`
-	id("maven-publish")
+
+	`maven-publish`
 }
 
-tasks.withType<Jar> {
+tasks.jar {
 	manifest {
 		attributes["Automatic-Module-Name"] = "axonframework.cdi"
 	}

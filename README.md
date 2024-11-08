@@ -18,9 +18,9 @@ The Library requires Java EE container
 
 ## Gradle dependency
 
-```java
+```kotlin
 dependencies {
-    implementation "com.scalified:axonframework-cdi:$VERSION"
+    implementation("com.scalified:axonframework-cdi:$VERSION")
 }
 ```
 
