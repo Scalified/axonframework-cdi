@@ -1,9 +1,12 @@
 [versions]
-axon = "4.10.3"
+axon = "4.12.1"
 
 lombok = "1.18.34"
 javaee = "8.0"
 commons-lang3 = "3.17.0"
+
+[plugins]
+gradle-publish = { id = "io.github.gradle-nexus.publish-plugin", version = "+" }
 
 [libraries]
 axon = { group = "org.axonframework", name = "axon-configuration", version.ref = "axon" }
